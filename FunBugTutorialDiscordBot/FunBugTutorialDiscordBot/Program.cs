@@ -60,18 +60,18 @@ namespace FunBugTutorialDiscordBot
         {
             _ = Task.Run(async () =>
             {
-            var message = arg as SocketUserMessage;
-            var context = new SocketCommandContext(_client, message);
-            if (message.Author.IsBot) return;
+                var message = arg as SocketUserMessage;
+                var context = new SocketCommandContext(_client, message);
+                if (message.Author.IsBot) return;
 
-            int argPos = 0;
-            var JSONReader = new config.JSONReader();
-            await JSONReader.ReadJSON();
-            if (message.HasStringPrefix(JSONReader.prefix, ref argPos))
-            {
-                var result = await _commands.ExecuteAsync(context, argPos, _services);
-                if (!result.IsSuccess) Console.WriteLine(result.ErrorReason);
-            }
+                int argPos = 0;
+                var JSONReader = new config.JSONReader();
+                await JSONReader.ReadJSON();
+                if (message.HasStringPrefix(JSONReader.prefix, ref argPos))
+                {
+                    var result = await _commands.ExecuteAsync(context, argPos, _services);
+                    if (!result.IsSuccess) Console.WriteLine(result.ErrorReason);
+                }
             });
             return Task.CompletedTask;
         }

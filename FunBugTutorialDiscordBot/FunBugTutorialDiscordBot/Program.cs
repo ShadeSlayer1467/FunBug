@@ -72,13 +72,6 @@ namespace FunBugTutorialDiscordBot
                 var result = await _commands.ExecuteAsync(context, argPos, _services);
                 if (!result.IsSuccess) Console.WriteLine(result.ErrorReason);
             }
-            else
-            {
-                await context.Channel.SendMessageAsync("Unknown command. Type !help for a list of commands.");
-                // repeat message
-                await context.Channel.SendMessageAsync("\'" + message.Content + "\'");
-                }
-            });
             return Task.CompletedTask;
         }
     }

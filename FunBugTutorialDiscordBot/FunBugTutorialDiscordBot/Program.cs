@@ -72,6 +72,7 @@ namespace FunBugTutorialDiscordBot
                 var result = await _commands.ExecuteAsync(context, argPos, _services);
                 if (!result.IsSuccess) Console.WriteLine(result.ErrorReason);
             }
+            });
             return Task.CompletedTask;
         }
     }

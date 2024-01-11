@@ -1,11 +1,15 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using FunBugTutorialDiscordBot.CardGames;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms.VisualStyles;
 using System.Windows.Interop;
 
 namespace FunBugTutorialDiscordBot.Modules
@@ -44,5 +48,32 @@ namespace FunBugTutorialDiscordBot.Modules
             };
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
+        [Command("randomcardgame")]
+        public async Task RandomCardGame()
+        {
+            var userCard = CardGames.Deck.GenerateRandomCard();
+            var botCard = CardGames.Deck.GenerateRandomCard();
+            var embed = new EmbedBuilder()
+            {
+                Title = "Random Card Game",
+                Description = $"{Context.User.GlobalName} drew {userCard} and the bot drew {botCard}",
+                Color = Color.DarkRed
+            };
+            await Context.Channel.SendMessageAsync("", false, embed.Build());
+
+            if (userCard.Rank > botCard.Rank)
+            {
+                await Context.Channel.SendMessageAsync($"{Context.User.GlobalName} wins!");
+            }
+            else if (userCard.Rank < botCard.Rank)
+            {
+                await Context.Channel.SendMessageAsync("Bot wins!");
+            }
+            else
+            {
+                await Context.Channel.SendMessageAsync("It's a tie!");
+            }
+        }
+
     }
 }

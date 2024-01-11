@@ -33,5 +33,16 @@ namespace FunBugTutorialDiscordBot.Modules
         {
             await ReplyAsync(num1 + " + " + num2 + " = " + (num1 + num2));
         }
+        [Command("embed")]
+        public async Task Embed([Remainder]string input)
+        {
+            var embed = new EmbedBuilder()
+            {
+                Title = "Here is an embedded message",
+                Description = $"{Context.User.GlobalName} said {input}",
+                Color = Color.DarkRed
+            };
+            await Context.Channel.SendMessageAsync("", false, embed.Build());
+        }
     }
 }

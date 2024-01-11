@@ -26,6 +26,7 @@ namespace FunBugTutorialDiscordBot.Modules
 
             //send delete count
             var deleteCount = messages.Count();
+            await ReplyAsync($"Deleted {deleteCount} messages.");
         }
     }
 }

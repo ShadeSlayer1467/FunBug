@@ -28,5 +28,10 @@ namespace FunBugTutorialDiscordBot.Modules
             var deleteCount = messages.Count();
             await ReplyAsync($"Deleted {deleteCount} messages.");
         }
+        [Command("add")]
+        public async Task Add(int num1, int num2)
+        {
+            await ReplyAsync(num1 + " + " + num2 + " = " + (num1 + num2));
+        }
     }
 }

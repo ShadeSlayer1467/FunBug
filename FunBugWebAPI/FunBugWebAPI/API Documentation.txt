@@ -1,0 +1,85 @@
+﻿FunBugWebAPI Documentation Version 1.0
+
+Overview
+The FunBugWebAPI is a RESTful service designed for managing a ToDo list system with a specific focus on Discord user integration. It allows users to create, update, toggle, and delete tasks associated with their Discord user ID.
+
+Base URL
+All URLs referenced in the documentation have the base path: /api/ToDoList
+
+API Endpoints
+List All Tasks
+	Endpoint: GET /All
+	Description: Retrieves a list of all tasks.
+	Responses:
+	200 Success: Returns an array of UserTask objects.
+
+
+List Tasks by Discord User ID
+	Endpoint: GET /{discordUserId}
+	Description: Retrieves tasks for a specific Discord user.
+	Parameters:
+	discordUserId (integer, required, path): The Discord user ID.
+	Responses:
+	200 Success: Returns an array of UserTask objects.
+
+
+Create Task
+	Endpoint: POST /
+	Description: Creates a new task.
+	Request Body: UserTask object in JSON format.
+	Responses:
+	200 Success: Task created successfully.
+
+
+Create Task with Query Parameters
+	Endpoint: POST /Create
+	Description: Creates a new task with query parameters.
+	Parameters:
+	discordUserId (integer, query): The Discord user ID.
+	taskDescription (string, query): Description of the task.
+	isCompleted (boolean, query): Task completion status.
+	Responses:
+	200 Success: Task created successfully.
+
+
+Toggle Task Completion
+	Endpoint: POST /ToggleTaskCompletion/{taskId}
+	Description: Toggles the completion status of a task.
+	Parameters:
+	taskId (integer, required, path): The ID of the task to toggle.
+	Responses:
+	200 Success: Task completion status toggled.
+
+
+Delete Task
+	Endpoint: DELETE /Task/{taskId}
+	Description: Deletes a specific task.
+	Parameters:
+	taskId (integer, required, path): The ID of the task to delete.
+	Responses:
+	200 Success: Task deleted successfully.
+
+
+Delete User Tasks
+	Endpoint: DELETE /User/{discordUserId}
+	Description: Deletes all tasks associated with a Discord user.
+	Parameters:
+	discordUserId (integer, required, path): The Discord user ID.
+	Responses:
+	200 Success: All tasks for the user deleted successfully.
+
+Components
+Schemas:
+	UserTask:
+	id (integer): Unique ID of the task.
+	discordUserId (integer): Discord user ID associated with the task.
+	taskDescription (string, nullable): Description of the task.
+	isCompleted (boolean): Indicates if the task is completed.
+
+
+Content Types Supported
+	application/json
+	text/json
+	text/plain
+Versioning
+This documentation is for version 1.0 of the FunBugWebAPI. Future versions may include additional endpoints, parameters, and updates to existing functionality.

@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
+using Discord.Interactions;
 using Discord.WebSocket;
 using FunBugTutorialDiscordBot.CardGames;
 using System;
@@ -74,6 +75,58 @@ namespace FunBugTutorialDiscordBot.Modules
                 await Context.Channel.SendMessageAsync("It's a tie!");
             }
         }
+        [SlashCommand("randomcardgame", "play game")]
+        public async Task RandomCardGameSlash()
+        {
+            var userCard = CardGames.Deck.GenerateRandomCard();
+            var botCard = CardGames.Deck.GenerateRandomCard();
+            var embed = new EmbedBuilder()
+            {
+                Title = "Random Card Game",
+                Description = $"{Context.User.GlobalName} drew {userCard} and the bot drew {botCard}",
+                Color = Color.DarkRed
+            };
+            await Context.Channel.SendMessageAsync("", false, embed.Build());
 
+            if (userCard.Rank > botCard.Rank)
+            {
+                await Context.Channel.SendMessageAsync($"{Context.User.GlobalName} wins!");
+            }
+            else if (userCard.Rank < botCard.Rank)
+            {
+                await Context.Channel.SendMessageAsync("Bot wins!");
+            }
+            else
+            {
+                await Context.Channel.SendMessageAsync("It's a tie!");
+            }
+        }
+
+    }
+    public class MyModule : InteractionModuleBase
+    {
+        private readonly MyService _service;
+
+        public MyModule(MyService service)
+        {
+            _service = service;
+        }
+
+        [SlashCommand("things", "Shows things")]
+        public async Task ThingsAsync()
+        {
+            var str = string.Join("\n", _service.Things);
+            await RespondAsync(str);
+        }
+    }
+    public class MyService
+    {
+        public List<string> Things { get; }
+
+        public MyService()
+        {
+            List<string> list = new List<string>();
+            Things = list;
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿{
   "token": "ENTER CLIENT TOKEN HERE",
-  "prefix": "!"
+  "prefix": "!",
+  "BasicGuildID": "1194908661395497000"
 }

@@ -6,8 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.Interactions;
+using Discord.Net;
 using Discord.WebSocket;
+using FunBugTutorialDiscordBot.Modules;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 
 namespace FunBugTutorialDiscordBot
 {
@@ -17,6 +21,7 @@ namespace FunBugTutorialDiscordBot
 
         private static DiscordSocketClient _client;
         private CommandService _commands;
+        private InteractionService _interactionService;
         private IServiceProvider _services;
 
         public async Task RunBotAsync()
@@ -31,16 +36,22 @@ namespace FunBugTutorialDiscordBot
             };
             _client = new DiscordSocketClient(config);
             _commands = new CommandService();
-
+            _interactionService = new InteractionService(_client.Rest);
             _services = new ServiceCollection()
                 .AddSingleton(_client)
                 .AddSingleton(_commands)
+                .AddSingleton(_interactionService)
                 .BuildServiceProvider();
             string DISCORD_FUNBUG_TOKEN = JSONReader.token;
             _client.Log += _client_Log;
             await RegisterCommandsAsync();
+            //----------------------------------------------------
+            // this line is to be moved to a new exe at some point
+            _client.Ready += RegiserSlashCommands;
+            // ---------------------------------------------------
             await _client.LoginAsync(TokenType.Bot, DISCORD_FUNBUG_TOKEN);
             await _client.StartAsync();
+
             await Task.Delay(-1);
         }
 
@@ -53,9 +64,44 @@ namespace FunBugTutorialDiscordBot
         public async Task RegisterCommandsAsync()
         {
             _client.MessageReceived += HandleCommandAsync;
+            _client.SlashCommandExecuted += SlashCommandHandler;
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
         }
+        public async Task RegiserSlashCommands()
+        {
+            var JSONReader = new config.JSONReader();
+            await JSONReader.ReadJSON();
 
+            List<KeyValuePair<SlashCommandBuilder, ulong>> guildCommands = new List<KeyValuePair<SlashCommandBuilder, ulong>>()
+            {
+                new KeyValuePair<SlashCommandBuilder, ulong>(
+                    new SlashCommandBuilder().WithName("first-command").WithDescription("This is my first guild slash command!"),
+                    JSONReader.BasicGuildID),
+                new KeyValuePair<SlashCommandBuilder, ulong>(
+                    new SlashCommandBuilder()
+                        .WithName("list-roles")
+                        .WithDescription("Lists all roles of a user.")
+                        .AddOption("user", ApplicationCommandOptionType.User, "The users whos roles you want to be listed", isRequired: true),
+                    JSONReader.BasicGuildID)
+            };
+
+            foreach (var guildCommand in guildCommands)
+            {
+                await AddSlashCommands.AddGuildSlashCommand(guildCommand.Value, _client, guildCommand.Key);
+            }
+
+            List<SlashCommandBuilder> globalCommands = new List<SlashCommandBuilder>()
+            {
+                new SlashCommandBuilder()
+                    .WithName("first-global-command")
+                    .WithDescription("This is my first global slash command")
+            };
+
+            foreach (var globalCommand in globalCommands)
+            {
+                await AddSlashCommands.AddGlobalSlashCommand(_client, globalCommand);
+            }
+        }
         private Task HandleCommandAsync(SocketMessage arg)
         {
             _ = Task.Run(async () =>
@@ -74,6 +120,11 @@ namespace FunBugTutorialDiscordBot
                 }
             });
             return Task.CompletedTask;
+        }
+        private async Task SlashCommandHandler(SocketSlashCommand command)
+        {
+            HandleSlashCommands slashCommands = new HandleSlashCommands();
+            await slashCommands.SlashCommandHandler(command);
         }
     }
 }

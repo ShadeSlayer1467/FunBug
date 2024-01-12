@@ -109,7 +109,9 @@
   <ItemGroup>
     <Compile Include="CardGames\Basic52CardDeck.cs" />
     <Compile Include="config\JSONReader.cs" />
+    <Compile Include="Modules\AddSlashCommands.cs" />
     <Compile Include="Modules\Commands.cs" />
+    <Compile Include="Modules\HandleSlashCommands.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

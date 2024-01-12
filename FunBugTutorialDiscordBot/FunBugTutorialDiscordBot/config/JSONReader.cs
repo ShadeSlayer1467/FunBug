@@ -11,6 +11,7 @@ namespace FunBugTutorialDiscordBot.config
     {
         public string token { get; set; }
         public string prefix { get; set; }
+        public ulong BasicGuildID { get; set; }
 
         public async Task ReadJSON()
         {
@@ -21,6 +22,7 @@ namespace FunBugTutorialDiscordBot.config
 
                 this.token = data.token;
                 this.prefix = data.prefix;
+                this.BasicGuildID = data.basicGuildID;
             }
         }
     }
@@ -28,5 +30,6 @@ namespace FunBugTutorialDiscordBot.config
     {
         public string token { get; set; }
         public string prefix { get; set; }
+        public ulong basicGuildID { get; set;}
     }
 }

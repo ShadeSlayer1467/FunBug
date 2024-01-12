@@ -56,7 +56,7 @@ namespace FunBugTutorialDiscordBot
         {
             var JSONReader = new config.JSONReader();
             await JSONReader.ReadConfigJSON();
-
+            /*
             List<KeyValuePair<SlashCommandBuilder, ulong>> guildCommands = new List<KeyValuePair<SlashCommandBuilder, ulong>>()
             {
                 new KeyValuePair<SlashCommandBuilder, ulong>(
@@ -140,6 +140,14 @@ namespace FunBugTutorialDiscordBot
                            .AddChoice("Excellent!", 5)
                            .WithType(ApplicationCommandOptionType.Integer)),
                     JSONReader.BasicGuildID)
+            };*/
+            List<KeyValuePair<SlashCommandBuilder, ulong>> guildCommands = new List<KeyValuePair<SlashCommandBuilder, ulong>>()
+            {
+                new KeyValuePair<SlashCommandBuilder, ulong>(
+                    new SlashCommandBuilder()
+                        .WithName("random-card-game")
+                        .WithDescription("Draw a card against the bot!"),
+                    JSONReader.BasicGuildID),
             };
 
             foreach (var guildCommand in guildCommands)
@@ -154,6 +162,9 @@ namespace FunBugTutorialDiscordBot
                 new SlashCommandBuilder()
                     .WithName("first-global-command")
                     .WithDescription("This is my first global slash command"),
+                new SlashCommandBuilder()
+                    .WithName("random-card-game")
+                    .WithDescription("Draw a card against the bot!")
 
             };
 

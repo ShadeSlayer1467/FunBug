@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FunBugTutorialDiscordBot.CardGames;
+using System.Runtime.Remoting.Contexts;
 
 namespace FunBugTutorialDiscordBot.Modules
 {
@@ -13,7 +15,7 @@ namespace FunBugTutorialDiscordBot.Modules
         public string FieldA { get; set; } = "test";
         public int FieldB { get; set; } = 10;
         public bool FieldC { get; set; } = true;
-        public async Task SlashCommandHandler(SocketSlashCommand command)
+        public async Task SlashCommandHandler(SocketSlashCommand command, DiscordSocketClient _client)
         {
             switch (command.Data.Name)
             {
@@ -28,7 +30,10 @@ namespace FunBugTutorialDiscordBot.Modules
                     break;
                 case "feedback":
                     await HandleFeedbackCommand(command);
-                    break;
+                    break; 
+                case "random-card-game":
+                    await HandleRandomCardGameCommand(command, _client);
+                    break; 
                 default:
                     await command.RespondAsync($"You executed {command.Data.Name}");
                     break;
@@ -114,5 +119,20 @@ namespace FunBugTutorialDiscordBot.Modules
 
             await command.RespondAsync(embed: embedBuilder.Build());
         }
+        private async Task HandleRandomCardGameCommand(SocketSlashCommand command, DiscordSocketClient _client)
+        {
+            var userCard = CardGames.Deck.GenerateRandomCard();
+            var botCard = CardGames.Deck.GenerateRandomCard();
+            var embedBuilder = new EmbedBuilder()
+            {
+                Title = "Random Card Game",
+                Description = $"{command.User.GlobalName} drew {userCard} and the bot drew {botCard}",
+                Color = Color.DarkRed
+            };
+            await command.RespondAsync(embed: embedBuilder.Build());
+
+            if (userCard.Rank == botCard.Rank) await command.Channel.SendMessageAsync("It's a tie!");
+            else await command.Channel.SendMessageAsync($"{((userCard.Rank > botCard.Rank) ? command.User.Mention : _client.GetUser(command.ApplicationId).Mention)} drew a higher card!");
+            }
     }
 }

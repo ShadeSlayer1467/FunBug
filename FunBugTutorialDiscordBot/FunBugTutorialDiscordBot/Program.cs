@@ -134,7 +134,7 @@ namespace FunBugTutorialDiscordBot
         private async Task SlashCommandHandler(SocketSlashCommand command)
         {
             HandleSlashCommands slashCommands = new HandleSlashCommands();
-            await slashCommands.SlashCommandHandler(command);
+            await slashCommands.SlashCommandHandler(command, _client);
         }
     }
 }

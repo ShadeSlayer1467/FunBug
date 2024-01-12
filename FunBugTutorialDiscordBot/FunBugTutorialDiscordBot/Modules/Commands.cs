@@ -75,33 +75,6 @@ namespace FunBugTutorialDiscordBot.Modules
                 await Context.Channel.SendMessageAsync("It's a tie!");
             }
         }
-        [SlashCommand("randomcardgame", "play game")]
-        public async Task RandomCardGameSlash()
-        {
-            var userCard = CardGames.Deck.GenerateRandomCard();
-            var botCard = CardGames.Deck.GenerateRandomCard();
-            var embed = new EmbedBuilder()
-            {
-                Title = "Random Card Game",
-                Description = $"{Context.User.GlobalName} drew {userCard} and the bot drew {botCard}",
-                Color = Color.DarkRed
-            };
-            await Context.Channel.SendMessageAsync("", false, embed.Build());
-
-            if (userCard.Rank > botCard.Rank)
-            {
-                await Context.Channel.SendMessageAsync($"{Context.User.GlobalName} wins!");
-            }
-            else if (userCard.Rank < botCard.Rank)
-            {
-                await Context.Channel.SendMessageAsync("Bot wins!");
-            }
-            else
-            {
-                await Context.Channel.SendMessageAsync("It's a tie!");
-            }
-        }
-
     }
     public class MyModule : InteractionModuleBase
     {

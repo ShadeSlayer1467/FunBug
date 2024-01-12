@@ -63,6 +63,9 @@ namespace FunBugTutorialDiscordBot
                     new SlashCommandBuilder().WithName("first-command").WithDescription("This is my first guild slash command!"),
                     JSONReader.BasicGuildID),
                 new KeyValuePair<SlashCommandBuilder, ulong>(
+                    new SlashCommandBuilder().WithName("second-command").WithDescription("This is my second guild slash command!"),
+                    JSONReader.BasicGuildID),
+                new KeyValuePair<SlashCommandBuilder, ulong>(
                     new SlashCommandBuilder()
                         .WithName("list-roles")
                         .WithDescription("Lists all roles of a user.")
@@ -121,24 +124,58 @@ namespace FunBugTutorialDiscordBot
                                 .WithType(ApplicationCommandOptionType.SubCommand)
                             )
                         ),
+                    JSONReader.BasicGuildID),
+                new KeyValuePair<SlashCommandBuilder, ulong>(
+                    new SlashCommandBuilder()
+                       .WithName("feedback")
+                       .WithDescription("Tell us how much you are enjoying this bot!")
+                       .AddOption(new SlashCommandOptionBuilder()
+                           .WithName("rating")
+                           .WithDescription("The rating your willing to give our bot")
+                           .WithRequired(true)
+                           .AddChoice("Terrible", 1)
+                           .AddChoice("Meh", 2)
+                           .AddChoice("Good", 3)
+                           .AddChoice("Lovely", 4)
+                           .AddChoice("Excellent!", 5)
+                           .WithType(ApplicationCommandOptionType.Integer)),
                     JSONReader.BasicGuildID)
             };
 
             foreach (var guildCommand in guildCommands)
             {
                 await AddSlashCommands.AddGuildSlashCommand(guildCommand.Value, _client, guildCommand.Key);
+                Console.WriteLine("Added Guild Command: " + guildCommand.Key.Name);
+                Console.WriteLine("------------------------");
             }
 
             List<SlashCommandBuilder> globalCommands = new List<SlashCommandBuilder>()
             {
                 new SlashCommandBuilder()
                     .WithName("first-global-command")
-                    .WithDescription("This is my first global slash command")
+                    .WithDescription("This is my first global slash command"),
+
             };
 
             foreach (var globalCommand in globalCommands)
             {
                 await AddSlashCommands.AddGlobalSlashCommand(_client, globalCommand);
+                Console.WriteLine("Added Global: " + globalCommand.Name);
+                Console.WriteLine("------------------------");
+            }
+
+            Console.WriteLine("Done");
+        }
+        async Task DeleteAllCommands()
+        {
+            var JSONReader = new config.JSONReader();
+            await JSONReader.ReadConfigJSON();
+
+            await _client.Rest.DeleteAllGlobalCommandsAsync();
+            var commands = await _client.Rest.GetGuildApplicationCommands(JSONReader.BasicGuildID);
+            foreach (var command in commands)
+            {
+                command.DeleteAsync().Wait();
             }
         }
     }

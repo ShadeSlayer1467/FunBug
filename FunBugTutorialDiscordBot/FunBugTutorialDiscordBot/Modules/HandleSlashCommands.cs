@@ -26,6 +26,9 @@ namespace FunBugTutorialDiscordBot.Modules
                 case "settings":
                     await HandleSettingsCommand(command);
                     break;
+                case "feedback":
+                    await HandleFeedbackCommand(command);
+                    break;
                 default:
                     await command.RespondAsync($"You executed {command.Data.Name}");
                     break;
@@ -99,6 +102,17 @@ namespace FunBugTutorialDiscordBot.Modules
                     }
                     break;
             }
+        }
+        private async Task HandleFeedbackCommand(SocketSlashCommand command)
+        {
+            var embedBuilder = new EmbedBuilder()
+                .WithAuthor(command.User)
+                .WithTitle("Feedback")
+                .WithDescription($"Thanks for your feedback! You rated us {command.Data.Options.First().Value}/5")
+                .WithColor(Color.Green)
+                .WithCurrentTimestamp();
+
+            await command.RespondAsync(embed: embedBuilder.Build());
         }
     }
 }

@@ -1,0 +1,44 @@
+﻿@page
+@model FunBugWebAPI.Pages.TasksModel
+@using SqlDataLib
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Tasks Page</title>
+</head>
+<body>
+    <h1>User Tasks</h1>
+
+    @if (Model.UserTasks == null || !Model.UserTasks.Any())
+    {
+        <p>No tasks available.</p>
+    }
+    else
+    {
+        @foreach (var group in Model.UserTasks.GroupBy(task => task.DiscordUserId))
+        {
+            <h2>User ID: @group.Key</h2>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Task ID</th>
+                        <th>Task Description</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var task in group)
+                    {
+                        <tr>
+                            <td>@task.Id</td>
+                            <td>@task.TaskDescription</td>
+                            <td>@(task.IsCompleted ? "Completed" : "Pending")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    }
+</body>
+</html>

@@ -15,6 +15,7 @@ namespace FunBugWebAPI.Controllers
         {
             this.dbcontext = dbcontext;
         }
+        #region Get
         [HttpGet("All")]
         public async Task<ActionResult<IEnumerable<UserTask>>> GetAll()
         {
@@ -41,6 +42,8 @@ namespace FunBugWebAPI.Controllers
 
             return Ok(tasks);
         }
+        #endregion Get
+        #region Post
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] UserTask userTask)
         {
@@ -54,6 +57,28 @@ namespace FunBugWebAPI.Controllers
 
             return Ok(userTask);
         }
+        [HttpPost("Create")]
+        public async Task<IActionResult> CreateTask([FromQuery] ulong discordUserId, [FromQuery] string taskDescription, [FromQuery] bool isCompleted)
+        {
+            if (string.IsNullOrWhiteSpace(taskDescription))
+            {
+                return BadRequest("Task description cannot be empty.");
+            }
+
+            var newTask = new UserTask
+            {
+                DiscordUserId = discordUserId,
+                TaskDescription = taskDescription,
+                IsCompleted = isCompleted
+            };
+
+            dbcontext.UserTasks.Add(newTask);
+            await dbcontext.SaveChangesAsync();
+
+            return Ok(newTask);
+        }
+        #endregion Post
+        #region Delete
         [HttpDelete("Task/{taskId}")]
         public async Task<IActionResult> DeleteTask(int taskId)
         {
@@ -85,5 +110,6 @@ namespace FunBugWebAPI.Controllers
                 
             return Ok($"All tasks for Discord user ID {discordUserId} deleted.");
         }
+        #endregion Delete
     }
 }

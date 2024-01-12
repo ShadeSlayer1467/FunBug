@@ -13,7 +13,7 @@
     @if (Model.UserTasks == null || !Model.UserTasks.Any())
     {
         <p>No tasks available.</p>
-    }
+    } 
     else
     {
         @foreach (var group in Model.UserTasks.GroupBy(task => task.DiscordUserId))

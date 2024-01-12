@@ -77,6 +77,24 @@ namespace FunBugWebAPI.Controllers
 
             return Ok(newTask);
         }
+        [HttpPost("ToggleTaskCompletion/{taskId}")]
+        public async Task<IActionResult> ToggleTaskCompletion(int taskId)
+        {
+            var task = await dbcontext.UserTasks.FindAsync(taskId);
+            if (task == null)
+            {
+                return NotFound($"Task with ID {taskId} not found.");
+            }
+
+            // Toggle the completion status
+            task.IsCompleted = !task.IsCompleted;
+
+            dbcontext.UserTasks.Update(task);
+            await dbcontext.SaveChangesAsync();
+
+            return Ok(task);
+        }
+
         #endregion Post
         #region Delete
         [HttpDelete("Task/{taskId}")]

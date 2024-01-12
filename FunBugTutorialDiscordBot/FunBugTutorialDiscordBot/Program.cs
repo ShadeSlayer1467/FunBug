@@ -21,7 +21,6 @@ namespace FunBugTutorialDiscordBot
 
         private static DiscordSocketClient _client;
         private CommandService _commands;
-        private InteractionService _interactionService;
         private IServiceProvider _services;
 
         public async Task RunBotAsync()
@@ -36,11 +35,9 @@ namespace FunBugTutorialDiscordBot
             };
             _client = new DiscordSocketClient(config);
             _commands = new CommandService();
-            _interactionService = new InteractionService(_client.Rest);
             _services = new ServiceCollection()
                 .AddSingleton(_client)
                 .AddSingleton(_commands)
-                .AddSingleton(_interactionService)
                 .BuildServiceProvider();
             string DISCORD_FUNBUG_TOKEN = JSONReader.token;
             _client.Log += _client_Log;

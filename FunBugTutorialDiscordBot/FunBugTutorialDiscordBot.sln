@@ -5,6 +5,8 @@ VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunBugTutorialDiscordBot", "FunBugTutorialDiscordBot\FunBugTutorialDiscordBot.csproj", "{81EA3294-A726-4B39-81A9-70B4235D213C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlashCommandConsole", "SlashCommandConsole\SlashCommandConsole.csproj", "{B3C830A7-119B-47A6-BABB-2EC89ADC534B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{81EA3294-A726-4B39-81A9-70B4235D213C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81EA3294-A726-4B39-81A9-70B4235D213C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81EA3294-A726-4B39-81A9-70B4235D213C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3C830A7-119B-47A6-BABB-2EC89ADC534B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3C830A7-119B-47A6-BABB-2EC89ADC534B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3C830A7-119B-47A6-BABB-2EC89ADC534B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3C830A7-119B-47A6-BABB-2EC89ADC534B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

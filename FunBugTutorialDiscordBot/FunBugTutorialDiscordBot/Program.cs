@@ -43,8 +43,8 @@ namespace FunBugTutorialDiscordBot
             _client.Log += _client_Log;
             await RegisterCommandsAsync();
             //----------------------------------------------------
-            // this line is to be moved to a new exe at some point
-            _client.Ready += RegiserSlashCommands;
+            // this line has been moved to a new exe
+            //_client.Ready += RegiserSlashCommands;
             // ---------------------------------------------------
             await _client.LoginAsync(TokenType.Bot, DISCORD_FUNBUG_TOKEN);
             await _client.StartAsync();
@@ -79,6 +79,12 @@ namespace FunBugTutorialDiscordBot
                         .WithName("list-roles")
                         .WithDescription("Lists all roles of a user.")
                         .AddOption("user", ApplicationCommandOptionType.User, "The users whos roles you want to be listed", isRequired: true),
+                    JSONReader.BasicGuildID),
+                new KeyValuePair<SlashCommandBuilder, ulong>(
+                    new SlashCommandBuilder()
+                        .WithName("list-roles-hidden")
+                        .WithDescription("Lists all roles of a user only to you.")
+                        .AddOption("user", ApplicationCommandOptionType.User, "The users whos roles you want to be listed", isRequired: true),
                     JSONReader.BasicGuildID)
             };
 
@@ -103,17 +109,24 @@ namespace FunBugTutorialDiscordBot
         {
             _ = Task.Run(async () =>
             {
-                var message = arg as SocketUserMessage;
-                var context = new SocketCommandContext(_client, message);
-                if (message.Author.IsBot) return;
-
-                int argPos = 0;
-                var JSONReader = new config.JSONReader();
-                await JSONReader.ReadJSON();
-                if (message.HasStringPrefix(JSONReader.prefix, ref argPos))
+                try
                 {
-                    var result = await _commands.ExecuteAsync(context, argPos, _services);
-                    if (!result.IsSuccess) Console.WriteLine(result.ErrorReason);
+                    var message = arg as SocketUserMessage;
+                    var context = new SocketCommandContext(_client, message);
+                    if (message.Author.IsBot) return;
+
+                    int argPos = 0;
+                    var JSONReader = new config.JSONReader();
+                    await JSONReader.ReadJSON();
+                    if (message.HasStringPrefix(JSONReader.prefix, ref argPos))
+                    {
+                        var result = await _commands.ExecuteAsync(context, argPos, _services);
+                        if (!result.IsSuccess) Console.WriteLine(result.ErrorReason);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
                 }
             });
             return Task.CompletedTask;
